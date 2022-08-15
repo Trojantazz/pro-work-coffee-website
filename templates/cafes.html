@@ -1,0 +1,71 @@
+{% include "header.html" %}
+
+<header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGNvZmZlZSUyMHNob3B8ZW58MHx8MHx8&auto=format&fit=crop&w=400&q=60')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                    <span class="Subheading"> Remote-Work Friendly Cafes Near You!</span>
+                    <p>Feel free to add cafes that may cater to fellow remote-work nomads</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    {% for row in all_cafes %}
+<div class="row justify-content-center">
+    {% for cafe in row %}
+
+    <div class="col-lg-4 d-flex justify-content-center mt-5 align-items-stretch">
+        <div class="card" style="width: 18rem;">
+            <img src="{{ cafe.img_url }}" style="height:215px" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">{{ cafe.name }}</h5>
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <h6 class="card-subtitle text-muted mb-1"> {{ cafe.location }} </h6>
+                        <a href="{{ cafe.map_url }}" class="card-link"> Google Maps </a>
+                        <p class="card-text mt-2">
+                            <i class="fas fa-coffee mr-3" aria-hidden="true"></i> {{ cafe.coffee_price }}
+                            <br>
+                            <i class="fas fa-chair mr-3" aria-hidden="true"></i> {{ cafe.seats}}
+                        </p>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                        <a href="{{ url_for('delete', id=cafe.id) }}" class="btn btn-primary">Delete</a>
+                    </div>
+                </div>
+                <hr>
+                <h6 class="card-subtitle text-muted mb-1"> Amenities </h6>
+                <p class="card-text items">
+                    {% if cafe.has_wifi == 1%}
+                    <i class="fas fa-wifi" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if cafe.has_sockets == 1%}
+                    <i class="fas fa-plug" style="width: 1.25rem; text-align:center" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if cafe.has_toilet == 1%}
+                    <i class="fas fa-toilet" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if cafe.can_take_calls == 1%}
+                    <i class="fas fa-phone" aria-hidden="true"></i>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% endfor %}
+
+</div>
+<hr>
+
+
+
+{% include "footer.html"%}

@@ -1,0 +1,31 @@
+{% include "header.html" %}
+
+<!-- Page header -->
+<header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Coffee & Productivity Corner </h1>
+                    <span class="Subheading"> Remote-Work Friendly Coffee shops Near You!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<hr>
+<div class="post-preview">
+    <div class="overlay"></div>
+    <div class="container" style="">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <p style="text-align:center;">During the pandemic remote-work became the new normal,Now we bring you remote-friendly cafes in your location, Join our community to contribute to our coffee<i class="fas fa-coffee mr-3" aria-hidden="true"></i> and wifi<i class="fas fa-wifi" aria-hidden="true"></i> website.</p>
+                <a href="{{ url_for('show_cafes') }}"><button type="button" class="btn btn-secondary btn-lg btn-block ">See Cafes</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+{% include "footer.html" %}

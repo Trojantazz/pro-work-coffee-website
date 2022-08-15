@@ -1,0 +1,32 @@
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+{% include 'header.html'%}
+
+
+<header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1518288319310-99bc48891084?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Add your favourite work-friendly cafe </h1>
+                    <span class="Subheading"> Your contribution helps others find cafes that have great coffee and a wi-fi connection</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+
+            {{wtf.quick_form(form,novalidate=True,button_map={"submit": "primary"})}}
+
+        </div>
+    </div>
+</div>
+{% include "footer.html" %}
+{% endblock %}
