@@ -26,10 +26,12 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 # -------------- LOAD USER FUNCTION -------------- #
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 # -------------- CONFIGURE CAFE TABLE -------------- #
 class Cafe(db.Model):
@@ -46,6 +48,7 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     users = relationship("User")
 
+
 # -------------- CONFIGURE USER TABLE -------------- #
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -57,6 +60,7 @@ class User(UserMixin, db.Model):
 
 
 db.create_all()
+
 
 # -------------- ALLOW ADMIN FUNCTIONS -------------- #
 def admin_only(f):
