@@ -46,6 +46,7 @@ class Cafe(db.Model):
     has_wifi = db.Column(db.Boolean, nullable=True)
     has_sockets = db.Column(db.Boolean, nullable=True)
     can_take_calls = db.Column(db.Boolean, nullable=True)
+    coffee_price = db.Column(db.String(250), nullable=False)
     users = relationship("User")
 
 
@@ -59,7 +60,7 @@ class User(UserMixin, db.Model):
     cafe_id = db.Column(db.Integer, db.ForeignKey('cafe.id'))
 
 
-db.create_all()
+#db.create_all()
 
 
 # -------------- ALLOW ADMIN FUNCTIONS -------------- #
