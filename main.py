@@ -9,30 +9,31 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CafeForm
 from flask_gravatar import Gravatar
+import os
 
 # -------------- Initialize Application --------------- #
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'KREFJEZIVOT'
+app.config['SECRET_KEY'] = os.environ.get('KREFJEZIVOT')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False,
                     base_url=None)
 
 # ----------------- Connect Database ------------------ #
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///cafes.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL1', 'sqlite:///blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
+# -------------- LOAD USER FUNCTION -------------- #
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
+# -------------- CONFIGURE CAFE TABLE -------------- #
 class Cafe(db.Model):
-    __tablename__ = "cafe"
+    __tablename__ = 'cafe'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), unique=True, nullable=False)
     map_url = db.Column(db.String(500), nullable=False)
@@ -45,9 +46,9 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     users = relationship("User")
 
-
+# -------------- CONFIGURE USER TABLE -------------- #
 class User(UserMixin, db.Model):
-    __tablename__ = "user"
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), unique=True, nullable=False)
     email = db.Column(db.String(250), nullable=False)
@@ -57,7 +58,7 @@ class User(UserMixin, db.Model):
 
 db.create_all()
 
-
+# -------------- ALLOW ADMIN FUNCTIONS -------------- #
 def admin_only(f):
     @wraps(f)
     def admin_function(*args, **kwargs):
@@ -68,6 +69,7 @@ def admin_only(f):
     return admin_function
 
 
+# -------------- RENDERS HOME PAGE -------------- #
 @app.route('/')
 def home():
     current_year = datetime.now().year
@@ -75,6 +77,7 @@ def home():
     return render_template("index.html", year=current_year, all_cafes=cafes, current_user=current_user)
 
 
+# -------------- RENDERS REGISTRATION FORM/PAGE -------------- #
 @app.route('/register', methods=["GET", "POST"])
 def register_user():
     current_year = datetime.now().year
@@ -100,7 +103,7 @@ def register_user():
     return render_template("register.html", form=form, current_user=current_user, year=current_year)
 
 
-
+# -------------- RENDERS LOGIN FORM/PAGE -------------- #
 @app.route('/login', methods=["GET", "POST"])
 def login():
     current_year = datetime.now().year
@@ -120,6 +123,7 @@ def login():
     return render_template("login.html", form=form, current_user=current_user, year=current_year)
 
 
+# -------------- RENDERS ADD CAFE FORM PAGE -------------- #
 @app.route('/add', methods=["GET", "POST"])
 @login_required
 def add_cafe():
@@ -143,6 +147,7 @@ def add_cafe():
     return render_template("add_cafe.html", form=form, year=current_year)
 
 
+# -------------- RENDERS CAFE FORM PAGE -------------- #
 @app.route('/cafes')
 def show_cafes():
     current_year = datetime.now().year
@@ -170,6 +175,7 @@ def show_cafes():
     return render_template("cafes.html", all_cafes=all_cafes_three_list, current_user=current_user, year=current_year)
 
 
+# -------------- LOGOUT BUTTON FUNCTION -------------- #
 @app.route('/logout')
 @login_required
 def logout():
@@ -177,6 +183,7 @@ def logout():
     return redirect(url_for('home'))
 
 
+# -------------- DELETE BUTTON FUNCTION -------------- #
 @app.route('/delete')
 @login_required
 def delete():
@@ -188,4 +195,4 @@ def delete():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
