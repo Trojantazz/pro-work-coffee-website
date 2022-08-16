@@ -13,7 +13,7 @@ import os
 
 # -------------- Initialize Application --------------- #
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'krefjezivot')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False,
@@ -47,7 +47,7 @@ class Cafe(db.Model):
     has_sockets = db.Column(db.Boolean, nullable=True)
     can_take_calls = db.Column(db.Boolean, nullable=True)
     coffee_price = db.Column(db.String(250), nullable=False)
-    users = relationship("User")
+    users = relationship("User", back_populates='cafe')
 
 
 # -------------- CONFIGURE USER TABLE -------------- #
@@ -58,9 +58,10 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(250), nullable=False)
     password = db.Column(db.String(250), nullable=False)
     cafe_id = db.Column(db.Integer, db.ForeignKey('cafe.id'))
+    cafe = relationship("Cafe", back_populates='users')
 
 
-#db.create_all()
+db.create_all()
 
 
 # -------------- ALLOW ADMIN FUNCTIONS -------------- #
@@ -137,18 +138,18 @@ def add_cafe():
     if form.validate_on_submit():
         new_cafe = Cafe(name=form.name.data,
                         map_url=form.map_url.data,
-                        image_url=form.image_url.data,
+                        img_url=form.image_url.data,
                         location=form.location.data,
                         seats=form.seats.data,
                         has_sockets=form.has_sockets.data,
-                        has_toilets=form.has_toilet.data,
+                        has_toilet=form.has_toilet.data,
                         has_wifi=form.has_wifi.data,
                         can_take_calls=form.can_take_calls.data,
                         coffee_price=form.coffee_price.data)
         db.session.add(new_cafe)
         db.session.commit()
 
-        return redirect(url_for("cafes"))
+        return redirect(url_for("show_cafes"))
     return render_template("add_cafe.html", form=form, year=current_year)
 
 
