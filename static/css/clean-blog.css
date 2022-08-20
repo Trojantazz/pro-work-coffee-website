@@ -227,7 +227,7 @@ img::-moz-selection {
     color: #212529;
   }
   #mainNav.is-fixed .navbar-brand:focus, #mainNav.is-fixed .navbar-brand:hover {
-    color: #0085A1;
+    color: #fff;
   }
   #mainNav.is-fixed .navbar-nav > li.nav-item > a {
     color: #212529;
